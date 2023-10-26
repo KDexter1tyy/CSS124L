@@ -6,12 +6,16 @@
 package pomodoroimproved;
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 /**
  *
@@ -19,19 +23,99 @@ import javax.swing.JOptionPane;
  */
 public class PomodoroImproved extends javax.swing.JFrame {
 
+    private Timer timer;
+    private int selectedTime;
     Calendar calendar;
-    SimpleDateFormat timeFormat=new SimpleDateFormat("hh:mm:ss a");
-    JLabel timeLabel;
+    SimpleDateFormat timeFormat=new SimpleDateFormat("hh:mm a");
+    private long timeRemaining;
     String time=timeFormat.format(Calendar.getInstance().getTime());
-    
     String tasksText= "";
+    private boolean isWorkTime = true;
     /**
      * Creates new form PomodoroImproved
      */
     public PomodoroImproved() {
         initComponents();
+        clock();
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (timeRemaining > 0) {
+                    timeRemaining -= 1000;
+                    updateTimerLabel();
+                } else {
+                    timer.stop();
+                    if (isWorkTime) {
+                        JOptionPane.showMessageDialog(null, "Congratulations on being productive, take a break! You deserve it!");
+                        System.out.println("Congratulations on being productive, take a break! You deserve it!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Rest time is over, let's get back to it!");
+                        System.out.println("Rest time is over, let's get back to it!");
+                    }
+                    isWorkTime = !isWorkTime;
+                }
+            }
+        });
     }
 
+    public void clock(){
+        Thread clock = new Thread(){
+            public void run(){
+                while (true){
+                String time=timeFormat.format(Calendar.getInstance().getTime());
+                currentTimeTitle.setText("Current Time: "+ time);
+                try {
+                    sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(PomodoroImproved.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                }
+            }
+            
+        };
+        
+        clock.start();
+    
+    }
+    private void stopPomodoro() {
+    timer.stop();
+    timeRemTitle.setText("Pomodoro stopped");
+    updateTimerLabel();
+
+    // Update the estimated finish time
+    updateClockLabel();
+}
+    private void startPomodoro() {
+        int timeInMilliseconds;
+        if (selectedTime == 0) {
+            timeInMilliseconds = 25 * 60 * 1000;
+        } else{
+            timeInMilliseconds = 5 * 60 * 1000;
+        }
+
+        timeRemaining = timeInMilliseconds;
+        updateTimerLabel();
+        JOptionPane.showMessageDialog(null,"Pomodoro started! Time selected: " + modeComboBox.getSelectedItem());
+        System.out.println("Pomodoro started! Time selected: " + modeComboBox.getSelectedItem());
+        timer.start();
+    }
+    private void updateTimerLabel() {
+    int minutes = (int) (timeRemaining / 60000);
+    int seconds = (int) ((timeRemaining % 60000) / 1000);
+    timeRemTitle.setText("Time remaining: " + minutes + " min " + seconds + " sec");
+    if (timer.isRunning()) {
+        updateClockLabel();
+    }
+    }
+    private void updateClockLabel() {
+        long currentTimeMillis = System.currentTimeMillis();
+        long estimatedFinishTimeMillis = currentTimeMillis + timeRemaining;
+        Date estimatedFinishTime = new Date(estimatedFinishTimeMillis);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm a");
+        String estimatedFinishTimeString = dateFormat.format(estimatedFinishTime);
+        eftTitle.setText("Estimated Finish Time: " + estimatedFinishTimeString);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,7 +124,6 @@ public class PomodoroImproved extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -75,7 +158,7 @@ public class PomodoroImproved extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 153, 153));
         setMaximumSize(new java.awt.Dimension(798, 33));
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         modePanel.setBackground(new java.awt.Color(255, 204, 204));
         modePanel.setMaximumSize(new java.awt.Dimension(200, 33));
@@ -86,7 +169,7 @@ public class PomodoroImproved extends javax.swing.JFrame {
         selectMode.setText("Select Mode:");
         selectMode.setPreferredSize(new java.awt.Dimension(175, 14));
 
-        modeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Mode...", "Work Time (25 mins)", "Rest Time (5 mins)" }));
+        modeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Work Time (25 mins)", "Rest Time (5 mins)" }));
         modeComboBox.setMaximumSize(new java.awt.Dimension(56, 20));
         modeComboBox.setPreferredSize(new java.awt.Dimension(175, 20));
         modeComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -103,8 +186,14 @@ public class PomodoroImproved extends javax.swing.JFrame {
             }
         });
 
+        StopPomBtn.setEnabled(false);
         StopPomBtn.setText("Stop Pomodoro");
         StopPomBtn.setPreferredSize(new java.awt.Dimension(175, 30));
+        StopPomBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StopPomBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout modePanelLayout = new javax.swing.GroupLayout(modePanel);
         modePanel.setLayout(modePanelLayout);
@@ -165,7 +254,7 @@ public class PomodoroImproved extends javax.swing.JFrame {
         TimePanel.add(currentTimeTitle);
 
         eftTitle.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        eftTitle.setText("EFT:");
+        eftTitle.setText("Estimated Finish Time: ");
         TimePanel.add(eftTitle);
 
         titlePomodoro.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -264,14 +353,18 @@ public class PomodoroImproved extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void StartPomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartPomBtnActionPerformed
-        if (modeComboBox.getSelectedItem()=="Select Mode..."){
+        /*if (modeComboBox.getSelectedItem()=="Select Mode..."){
             JOptionPane.showMessageDialog(null,"You Did Not Select a Mode!","Error",JOptionPane.ERROR_MESSAGE);
         
         }else{
         JOptionPane.showMessageDialog(null,"Pomodoro started! Time selected: " + modeComboBox.getSelectedItem());
         System.out.println("Pomodoro started! Time selected: " + modeComboBox.getSelectedItem());
-        }
+        }*/
         
+        StartPomBtn.setEnabled(false);
+        StopPomBtn.setEnabled(true);
+        selectedTime = modeComboBox.getSelectedIndex();
+        startPomodoro();
         
         
 
@@ -298,6 +391,12 @@ public class PomodoroImproved extends javax.swing.JFrame {
         
         tasksText="";
     }//GEN-LAST:event_clearAllBtnActionPerformed
+
+    private void StopPomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopPomBtnActionPerformed
+        StartPomBtn.setEnabled(true);
+        StopPomBtn.setEnabled(false);
+        stopPomodoro();
+    }//GEN-LAST:event_StopPomBtnActionPerformed
 
     /**
      * @param args the command line arguments
