@@ -1,3 +1,3 @@
-# CSS124L-GUI-Programming
-Pomodoro Timer
+# CSS124L-Final-Project
+Pomodoro Timer Improved
 
