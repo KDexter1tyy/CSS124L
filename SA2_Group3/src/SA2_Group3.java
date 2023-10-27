@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.ButtonGroup;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
@@ -32,6 +33,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
     String time=timeFormat.format(Calendar.getInstance().getTime());
     String tasksText= "";
     private boolean isWorkTime = true;
+    private ButtonGroup radioButtonGroup;
     /**
      * Creates new form PomodoroImproved
      */
@@ -57,6 +59,33 @@ public class SA2_Group3 extends javax.swing.JFrame {
                 }
             }
         });
+         radioButtonGroup = new ButtonGroup(); 
+
+      
+        radioButtonGroup.add(jRadioButtonMenuItem4);
+        radioButtonGroup.add(jRadioButtonMenuItem5);
+        radioButtonGroup.add(jRadioButtonMenuItem6);
+                
+         jRadioButtonMenuItem5.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            jRadioButtonMenuItem5ActionPerformed(evt);
+        }
+    });
+         
+          jRadioButtonMenuItem4.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            jRadioButtonMenuItem5ActionPerformed(evt);
+        }
+    });
+          
+           jRadioButtonMenuItem6.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            jRadioButtonMenuItem5ActionPerformed(evt);
+        }
+    });
     }
 
     public void clock(){
@@ -396,7 +425,28 @@ public class SA2_Group3 extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_addTaskBtnActionPerformed
+    
+   private void taskListTextAreaMouseClicked(java.awt.event.MouseEvent evt) {                                              
+        String taskListText = taskListTextArea.getText();
+    
+    int caretPosition = taskListTextArea.viewToModel(evt.getPoint()); 
+    int start = taskListText.lastIndexOf("\n", caretPosition) + 1; //Finds the selected task line
+    int end = taskListText.indexOf("\n", start);
+    
 
+    if (start >= 0 && end >= 0) {
+  
+        String clickedTask = taskListText.substring(start, end).trim();
+        
+      
+        String startTime = new SimpleDateFormat("hh:mm a").format(new Date());
+        String startDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+        
+
+        String message = "Task Name: " + clickedTask + "\nTime Created: " + startTime + " on " + startDate;
+        JOptionPane.showMessageDialog(this, message, "Task Information", JOptionPane.INFORMATION_MESSAGE);
+    }
+    }       
     private void clearAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearAllBtnActionPerformed
         taskListTextArea.selectAll();
         taskListTextArea.replaceSelection("");
@@ -418,7 +468,37 @@ public class SA2_Group3 extends javax.swing.JFrame {
             taskListTextArea.setText(tasks);
     }
     }//GEN-LAST:event_removeFirstTaskBtnActionPerformed
+    
+  private void showAboutMessage() {
+    String aboutMessage = "Enhanced Pomodoro Timer\n\nCreated by Group 3 \n© 2023";
+    JOptionPane.showMessageDialog(this, aboutMessage, "About Pomodoro Timer", JOptionPane.INFORMATION_MESSAGE);
+}
+  private void jRadioButtonMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {                                                      
+     if (jRadioButtonMenuItem5.isSelected()) {
+    getContentPane().setBackground(Color.CYAN);
+    modePanel.setBackground(Color.CYAN); 
+    timePanel.setBackground(Color.CYAN);  
+    tasksPanel.setBackground(Color.CYAN); 
+     }
+    }                                                     
 
+    private void jRadioButtonMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {                                                      
+    if (jRadioButtonMenuItem4.isSelected()) {    
+        getContentPane().setBackground(Color.PINK);
+    modePanel.setBackground(Color.PINK);  
+    timePanel.setBackground(Color.PINK);  
+    tasksPanel.setBackground(Color.PINK); 
+     }
+    }                                                     
+
+    private void jRadioButtonMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {                                                      
+     if (jRadioButtonMenuItem6.isSelected()) {
+        getContentPane().setBackground(Color.GRAY);
+    modePanel.setBackground(Color.GRAY);  
+    timePanel.setBackground(Color.GRAY);  
+    tasksPanel.setBackground(Color.GRAY); 
+     }
+    }                    
     /**
      * @param args the command line arguments
      */
