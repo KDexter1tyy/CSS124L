@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.Timer;
 
 /**
@@ -116,6 +117,7 @@ public class PomodoroImproved extends javax.swing.JFrame {
         eftTitle.setText("Estimated Finish Time: " + estimatedFinishTimeString);
     }
     
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -147,6 +149,7 @@ public class PomodoroImproved extends javax.swing.JFrame {
         clearAllBtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         addTaskTextField = new javax.swing.JTextField();
+        removeFirstTaskBtn = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -298,6 +301,14 @@ public class PomodoroImproved extends javax.swing.JFrame {
                 addTaskBtnActionPerformed(evt);
             }
         });
+        
+        removeFirstTaskBtn.setText("Clear First Task");
+        removeFirstTaskBtn.setPreferredSize(new java.awt.Dimension(174, 30));
+        removeFirstTaskBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeFirstTaskBtnActionPerformed(evt);
+            }
+        });
 
         clearAllBtn.setText("Clear All Tasks");
         clearAllBtn.setPreferredSize(new java.awt.Dimension(174, 30));
@@ -320,6 +331,7 @@ public class PomodoroImproved extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(tasksPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(addTaskBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(removeFirstTaskBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(clearAllBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(addTaskTextField))
@@ -334,6 +346,8 @@ public class PomodoroImproved extends javax.swing.JFrame {
                 .addComponent(addTaskTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(addTaskBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(removeFirstTaskBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clearAllBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(185, Short.MAX_VALUE))
@@ -384,6 +398,16 @@ public class PomodoroImproved extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_addTaskBtnActionPerformed
+    
+    private void removeFirstTaskBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        String tasks = taskListTextArea.getText();
+        int indexOfNewLine = tasks.indexOf("\n");
+        if (indexOfNewLine != -1) {
+        tasks = tasks.substring(indexOfNewLine + 1);
+            taskListTextArea.setText(tasks);
+    }
+}
+
 
     private void clearAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearAllBtnActionPerformed
         taskListTextArea.selectAll();
@@ -465,5 +489,6 @@ public class PomodoroImproved extends javax.swing.JFrame {
     private javax.swing.JPanel timePanel;
     private javax.swing.JLabel timeRemTitle;
     private javax.swing.JLabel titlePomodoro;
+    private javax.swing.JButton removeFirstTaskBtn;
     // End of variables declaration//GEN-END:variables
 }
