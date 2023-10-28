@@ -6,16 +6,21 @@
 
 
 
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.ButtonGroup;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
@@ -28,15 +33,12 @@ public class SA2_Group3 extends javax.swing.JFrame {
     private Timer timer;
     private int selectedTime;
     Calendar calendar;
-    SimpleDateFormat timeFormat=new SimpleDateFormat("hh:mm a");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
     private long timeRemaining;
-    String time=timeFormat.format(Calendar.getInstance().getTime());
-    String tasksText= "";
+    String time = timeFormat.format(Calendar.getInstance().getTime());
+    String tasksText = "";
     private boolean isWorkTime = true;
-    private ButtonGroup radioButtonGroup;
-    /**
-     * Creates new form PomodoroImproved
-     */
+
     public SA2_Group3() {
         initComponents();
         clock();
@@ -59,84 +61,149 @@ public class SA2_Group3 extends javax.swing.JFrame {
                 }
             }
         });
-         radioButtonGroup = new ButtonGroup(); 
 
-      
-        radioButtonGroup.add(jRadioButtonMenuItem4);
-        radioButtonGroup.add(jRadioButtonMenuItem5);
-        radioButtonGroup.add(jRadioButtonMenuItem6);
-                
-         jRadioButtonMenuItem5.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent evt) {
-            jRadioButtonMenuItem5ActionPerformed(evt);
-        }
-    });
-         
-          jRadioButtonMenuItem4.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent evt) {
-            jRadioButtonMenuItem5ActionPerformed(evt);
-        }
-    });
-          
-           jRadioButtonMenuItem6.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent evt) {
-            jRadioButtonMenuItem5ActionPerformed(evt);
-        }
-    });
+        JMenuItem timersMenuItem = jMenu1.add("Timer");
+        JMenuItem resetMenuItem = jMenu1.add("Reset");
+        JMenuItem aboutTimerMenuItem = jMenu2.add("About the Pomodoro Timer");
+        JMenuItem aboutUsMenuItem = jMenu2.add("About Us");
+
+        timersMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(SA2_Group3.this, "Timers menu clicked! You can add your timers functionality here.");
+            }
+        });
+        
+        resetMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetPomodoro();
+            }
+        });
+        
+        aboutTimerMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(SA2_Group3.this, "This timer was created as a way for people to make use of their time efficiently. \nThe Pomodoro Method is a well-known method which combines a few short bursts of producitivity along with rests.");
+            }
+        });
+
+
+        aboutUsMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPanel panel = new JPanel();
+                panel.setLayout(new GridLayout(1, 5));
+                final JLabel label = new JLabel("Hover over me");
+
+                String[] imagePaths = {
+                    "laq.png",
+                    "mag.png",
+                    "mal.png",
+                    "mam.png",
+                    "pan.png"
+                };
+
+                String[] tooltips = {
+                    "Laqueo, Lorenzo Miguel",
+                    "Magno, Kristian Clarence",
+                    "Mallari, Rafael",
+                    "Mampusti, Rigel Kent",
+                    "Panganiban, Kyle Dexter"
+                };
+
+                JLabel[] imageLabels = new JLabel[5];  // Create an array to store the labels
+
+                for (int i = 0; i < 5; i++) {
+                    ImageIcon icon = new ImageIcon(imagePaths[i]);
+                    imageLabels[i] = new JLabel(icon);
+                    imageLabels[i].setToolTipText(tooltips[i]);
+
+                    imageLabels[i].addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                            label.setText(((JLabel) e.getSource()).getToolTipText()); // Get the tooltip from the label
+                        }
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                            label.setText("Hover over me");
+                        }
+                    });
+
+                    panel.add(imageLabels[i]);
+                }
+
+                JOptionPane.showMessageDialog(SA2_Group3.this, panel, "About Us", JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+
+
+
+
     }
 
-    public void clock(){
-        Thread clock = new Thread(){
-            public void run(){
-                while (true){
-                String time=timeFormat.format(Calendar.getInstance().getTime());
-                currentTimeTitle.setText("Current Time: "+ time);
-                try {
-                    sleep(1000);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(SA2_Group3.class.getName()).log(Level.SEVERE, null, ex);
-                }
+    public void clock() {
+        Thread clock = new Thread() {
+            public void run() {
+                while (true) {
+                    String time = timeFormat.format(Calendar.getInstance().getTime());
+                    currentTimeTitle.setText("Current Time: " + time);
+                    try {
+                        sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(SA2_Group3.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
-            
         };
-        
+
         clock.start();
-    
+
     }
-    private void stopPomodoro() {
+    
+    private void resetPomodoro() {
     timer.stop();
+    StartPomBtn.setEnabled(true);
+    StopPomBtn.setEnabled(false);
     timeRemTitle.setText("Pomodoro stopped");
     updateTimerLabel();
+    taskListTextArea.setText("");
+    addTaskTextField.setText("");
+    timeRemTitle.setText("Time Remaining: ");
+    eftTitle.setText("Estimated Finish Time: ");
+    }
 
-    // Update the estimated finish time
-    updateClockLabel();
-}
+    private void stopPomodoro() {
+        timer.stop();
+        timeRemTitle.setText("Pomodoro stopped");
+        updateTimerLabel();
+    }
+
     private void startPomodoro() {
         int timeInMilliseconds;
         if (selectedTime == 0) {
             timeInMilliseconds = 25 * 60 * 1000;
-        } else{
+        } else {
             timeInMilliseconds = 5 * 60 * 1000;
         }
 
         timeRemaining = timeInMilliseconds;
         updateTimerLabel();
-        JOptionPane.showMessageDialog(null,"Pomodoro started! Time selected: " + modeComboBox.getSelectedItem());
+        JOptionPane.showMessageDialog(null, "Pomodoro started! Time selected: " + modeComboBox.getSelectedItem());
         System.out.println("Pomodoro started! Time selected: " + modeComboBox.getSelectedItem());
         timer.start();
     }
+
     private void updateTimerLabel() {
-    int minutes = (int) (timeRemaining / 60000);
-    int seconds = (int) ((timeRemaining % 60000) / 1000);
-    timeRemTitle.setText("Time remaining: " + minutes + " min " + seconds + " sec");
-    if (timer.isRunning()) {
-        updateClockLabel();
+        int minutes = (int) (timeRemaining / 60000);
+        int seconds = (int) ((timeRemaining % 60000) / 1000);
+        timeRemTitle.setText("Time remaining: " + minutes + " min " + seconds + " sec");
+        if (timer.isRunning()) {
+            updateClockLabel();
+        }
     }
-    }
+
     private void updateClockLabel() {
         long currentTimeMillis = System.currentTimeMillis();
         long estimatedFinishTimeMillis = currentTimeMillis + timeRemaining;
@@ -382,7 +449,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
 
         getContentPane().add(tasksPanel);
 
-        jMenu1.setText("Timers");
+        jMenu1.setText("Timer");
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("About");
@@ -420,33 +487,12 @@ public class SA2_Group3 extends javax.swing.JFrame {
         taskListTextArea.replaceSelection("");
         String textLang = addTaskTextField.getText()+"\n";
         tasksText=tasksText+textLang;
-        
         taskListTextArea.setText(tasksText);
+        addTaskTextField.setText("");
         
         
     }//GEN-LAST:event_addTaskBtnActionPerformed
-    
-   private void taskListTextAreaMouseClicked(java.awt.event.MouseEvent evt) {                                              
-        String taskListText = taskListTextArea.getText();
-    
-    int caretPosition = taskListTextArea.viewToModel(evt.getPoint()); 
-    int start = taskListText.lastIndexOf("\n", caretPosition) + 1; //Finds the selected task line
-    int end = taskListText.indexOf("\n", start);
-    
 
-    if (start >= 0 && end >= 0) {
-  
-        String clickedTask = taskListText.substring(start, end).trim();
-        
-      
-        String startTime = new SimpleDateFormat("hh:mm a").format(new Date());
-        String startDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
-        
-
-        String message = "Task Name: " + clickedTask + "\nTime Created: " + startTime + " on " + startDate;
-        JOptionPane.showMessageDialog(this, message, "Task Information", JOptionPane.INFORMATION_MESSAGE);
-    }
-    }       
     private void clearAllBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearAllBtnActionPerformed
         taskListTextArea.selectAll();
         taskListTextArea.replaceSelection("");
@@ -468,37 +514,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
             taskListTextArea.setText(tasks);
     }
     }//GEN-LAST:event_removeFirstTaskBtnActionPerformed
-    
-  private void showAboutMessage() {
-    String aboutMessage = "Enhanced Pomodoro Timer\n\nCreated by Group 3 \n© 2023";
-    JOptionPane.showMessageDialog(this, aboutMessage, "About Pomodoro Timer", JOptionPane.INFORMATION_MESSAGE);
-}
-  private void jRadioButtonMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {                                                      
-     if (jRadioButtonMenuItem5.isSelected()) {
-    getContentPane().setBackground(Color.CYAN);
-    modePanel.setBackground(Color.CYAN); 
-    timePanel.setBackground(Color.CYAN);  
-    tasksPanel.setBackground(Color.CYAN); 
-     }
-    }                                                     
 
-    private void jRadioButtonMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {                                                      
-    if (jRadioButtonMenuItem4.isSelected()) {    
-        getContentPane().setBackground(Color.PINK);
-    modePanel.setBackground(Color.PINK);  
-    timePanel.setBackground(Color.PINK);  
-    tasksPanel.setBackground(Color.PINK); 
-     }
-    }                                                     
-
-    private void jRadioButtonMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {                                                      
-     if (jRadioButtonMenuItem6.isSelected()) {
-        getContentPane().setBackground(Color.GRAY);
-    modePanel.setBackground(Color.GRAY);  
-    timePanel.setBackground(Color.GRAY);  
-    tasksPanel.setBackground(Color.GRAY); 
-     }
-    }                    
     /**
      * @param args the command line arguments
      */
