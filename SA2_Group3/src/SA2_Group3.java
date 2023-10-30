@@ -507,6 +507,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("About");
+        jMenu2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Settings");
@@ -547,6 +548,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
         setJMenuBar(jMenuBar1);
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void StartPomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartPomBtnActionPerformed
