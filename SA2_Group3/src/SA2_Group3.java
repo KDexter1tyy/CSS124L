@@ -6,6 +6,7 @@
 
 
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,12 +17,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 /**
@@ -38,6 +41,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
     String time = timeFormat.format(Calendar.getInstance().getTime());
     String tasksText = "";
     private boolean isWorkTime = true;
+     private ButtonGroup radioButtonGroup;
 
     public SA2_Group3() {
         initComponents();
@@ -62,17 +66,17 @@ public class SA2_Group3 extends javax.swing.JFrame {
             }
         });
 
-        JMenuItem timersMenuItem = jMenu1.add("Timer");
+        // JMenuItem timersMenuItem = jMenu1.add("Timer");
         JMenuItem resetMenuItem = jMenu1.add("Reset");
         JMenuItem aboutTimerMenuItem = jMenu2.add("About the Pomodoro Timer");
         JMenuItem aboutUsMenuItem = jMenu2.add("About Us");
 
-        timersMenuItem.addActionListener(new ActionListener() {
+        /* timersMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(SA2_Group3.this, "Timers menu clicked! You can add your timers functionality here.");
             }
-        });
+        }); */
         
         resetMenuItem.addActionListener(new ActionListener() {
             @Override
@@ -93,7 +97,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JPanel panel = new JPanel();
-                panel.setLayout(new GridLayout(1, 5));
+                panel.setLayout(new GridLayout(2, 6));
                 final JLabel label = new JLabel("Hover over me");
 
                 String[] imagePaths = {
@@ -112,7 +116,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
                     "Panganiban, Kyle Dexter"
                 };
 
-                JLabel[] imageLabels = new JLabel[5];  // Create an array to store the labels
+                JLabel[] imageLabels = new JLabel[5];
 
                 for (int i = 0; i < 5; i++) {
                     ImageIcon icon = new ImageIcon(imagePaths[i]);
@@ -122,22 +126,49 @@ public class SA2_Group3 extends javax.swing.JFrame {
                     imageLabels[i].addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseEntered(MouseEvent e) {
-                            label.setText(((JLabel) e.getSource()).getToolTipText()); // Get the tooltip from the label
+                            label.setText(((JLabel) e.getSource()).getToolTipText());
                         }
 
-                        @Override
-                        public void mouseExited(MouseEvent e) {
-                            label.setText("Hover over me");
-                        }
                     });
 
                     panel.add(imageLabels[i]);
                 }
+                
+                        JLabel groupLabel = new JLabel("CSS124L Group 3");
+                        groupLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                        panel.add(groupLabel);
+                
 
                 JOptionPane.showMessageDialog(SA2_Group3.this, panel, "About Us", JOptionPane.PLAIN_MESSAGE);
             }
         });
+       radioButtonGroup = new ButtonGroup(); 
 
+      
+        radioButtonGroup.add(jRadioButtonMenuItem1);
+        radioButtonGroup.add(jRadioButtonMenuItem2);
+        radioButtonGroup.add(jRadioButtonMenuItem3);
+                
+         jRadioButtonMenuItem1.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            jRadioButtonMenuItem1ActionPerformed(evt);
+        }
+    });
+         
+          jRadioButtonMenuItem2.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            jRadioButtonMenuItem2ActionPerformed(evt);
+        }
+    });
+          
+           jRadioButtonMenuItem3.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            jRadioButtonMenuItem3ActionPerformed(evt);
+        }
+    });
 
 
 
@@ -230,6 +261,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
         modeComboBox = new javax.swing.JComboBox<>();
         StartPomBtn = new javax.swing.JButton();
         StopPomBtn = new javax.swing.JButton();
+        StopPomBtn1 = new javax.swing.JButton();
         timePanel = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -249,6 +281,11 @@ public class SA2_Group3 extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
+        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem2 = new javax.swing.JRadioButtonMenuItem();
+        jRadioButtonMenuItem3 = new javax.swing.JRadioButtonMenuItem();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -293,6 +330,15 @@ public class SA2_Group3 extends javax.swing.JFrame {
             }
         });
 
+        StopPomBtn.setEnabled(false);
+        StopPomBtn1.setText("Pause/Resume");
+        StopPomBtn1.setPreferredSize(new java.awt.Dimension(175, 30));
+        StopPomBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StopPomBtn1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout modePanelLayout = new javax.swing.GroupLayout(modePanel);
         modePanel.setLayout(modePanelLayout);
         modePanelLayout.setHorizontalGroup(
@@ -303,7 +349,8 @@ public class SA2_Group3 extends javax.swing.JFrame {
                     .addComponent(modeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(selectMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(StartPomBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(StopPomBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(StopPomBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(StopPomBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23))
         );
         modePanelLayout.setVerticalGroup(
@@ -317,6 +364,8 @@ public class SA2_Group3 extends javax.swing.JFrame {
                 .addComponent(StartPomBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(StopPomBtn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(StopPomBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -332,6 +381,11 @@ public class SA2_Group3 extends javax.swing.JFrame {
         taskListTextArea.setColumns(20);
         taskListTextArea.setRows(5);
         taskListTextArea.setEditable(false);
+        taskListTextArea.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                taskListTextAreaMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(taskListTextArea);
 
         jPanel4.add(jScrollPane2, java.awt.BorderLayout.CENTER);
@@ -455,6 +509,41 @@ public class SA2_Group3 extends javax.swing.JFrame {
         jMenu2.setText("About");
         jMenuBar1.add(jMenu2);
 
+        jMenu3.setText("Settings");
+
+        jMenu4.setText("Change Background Color");
+
+        jRadioButtonMenuItem1.setSelected(true);
+        jRadioButtonMenuItem1.setText("Cyan");
+        jRadioButtonMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jRadioButtonMenuItem1);
+
+        jRadioButtonMenuItem2.setSelected(true);
+        jRadioButtonMenuItem2.setText("Pink");
+        jRadioButtonMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jRadioButtonMenuItem2);
+
+        jRadioButtonMenuItem3.setSelected(true);
+        jRadioButtonMenuItem3.setText("Gray");
+        jRadioButtonMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jRadioButtonMenuItem3);
+
+        jMenu3.add(jMenu4);
+
+        jMenuBar1.add(jMenu3);
+
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -514,6 +603,71 @@ public class SA2_Group3 extends javax.swing.JFrame {
             taskListTextArea.setText(tasks);
     }
     }//GEN-LAST:event_removeFirstTaskBtnActionPerformed
+    
+    private boolean isPaused = false; // A boolean to track whether the Pomodoro is paused
+    private void StopPomBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StopPomBtn1ActionPerformed
+        // TODO add your handling code here:
+        if (!timer.isRunning()) { // If the timer is not running, resume the Pomodoro
+        timer.start();
+        isPaused = false;
+        updateTimerLabel();
+    } else { // If the timer is running, pause the Pomodoro
+        timer.stop();
+        isPaused = true;
+        timeRemTitle.setText("Pomodoro paused");
+    }
+    // Toggle the text on the button
+    StopPomBtn1.setText(isPaused ? "Resume Pomodoro" : "Pause Pomodoro");
+    }//GEN-LAST:event_StopPomBtn1ActionPerformed
+
+    private void jRadioButtonMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem3ActionPerformed
+      if (jRadioButtonMenuItem3.isSelected()) {
+        getContentPane().setBackground(Color.GRAY);
+    modePanel.setBackground(Color.GRAY);  
+    timePanel.setBackground(Color.GRAY);  
+    tasksPanel.setBackground(Color.GRAY); 
+     }
+    }//GEN-LAST:event_jRadioButtonMenuItem3ActionPerformed
+
+    private void jRadioButtonMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem1ActionPerformed
+             if (jRadioButtonMenuItem1.isSelected()) {
+    getContentPane().setBackground(Color.CYAN);
+    modePanel.setBackground(Color.CYAN); 
+    timePanel.setBackground(Color.CYAN);  
+    tasksPanel.setBackground(Color.CYAN); 
+     }
+    }//GEN-LAST:event_jRadioButtonMenuItem1ActionPerformed
+
+    private void jRadioButtonMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonMenuItem2ActionPerformed
+     if (jRadioButtonMenuItem2.isSelected()) {    
+        getContentPane().setBackground(Color.PINK);
+    modePanel.setBackground(Color.PINK);  
+    timePanel.setBackground(Color.PINK);  
+    tasksPanel.setBackground(Color.PINK); 
+     }
+    }//GEN-LAST:event_jRadioButtonMenuItem2ActionPerformed
+
+    private void taskListTextAreaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taskListTextAreaMouseClicked
+    String taskListText = taskListTextArea.getText();
+    
+    int caretPosition = taskListTextArea.viewToModel(evt.getPoint()); 
+    int start = taskListText.lastIndexOf("\n", caretPosition) + 1; //Finds the selected task line
+    int end = taskListText.indexOf("\n", start);
+    
+
+    if (start >= 0 && end >= 0) {
+  
+        String clickedTask = taskListText.substring(start, end).trim();
+        
+      
+        String startTime = new SimpleDateFormat("hh:mm a").format(new Date());
+        String startDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+        
+
+        String message = "Task Name: " + clickedTask + "\nTime Created: " + startTime + " on " + startDate;
+        JOptionPane.showMessageDialog(this, message, "Task Information", JOptionPane.INFORMATION_MESSAGE);
+    }
+    }//GEN-LAST:event_taskListTextAreaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -560,6 +714,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton StartPomBtn;
     private javax.swing.JButton StopPomBtn;
+    private javax.swing.JButton StopPomBtn1;
     private javax.swing.JPanel TimePanel;
     private javax.swing.JButton addTaskBtn;
     private javax.swing.JTextField addTaskTextField;
@@ -569,8 +724,13 @@ public class SA2_Group3 extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
