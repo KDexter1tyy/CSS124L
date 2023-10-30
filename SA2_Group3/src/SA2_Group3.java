@@ -239,7 +239,7 @@ public class SA2_Group3 extends javax.swing.JFrame {
         long currentTimeMillis = System.currentTimeMillis();
         long estimatedFinishTimeMillis = currentTimeMillis + timeRemaining;
         Date estimatedFinishTime = new Date(estimatedFinishTimeMillis);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm a");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
         String estimatedFinishTimeString = dateFormat.format(estimatedFinishTime);
         eftTitle.setText("Estimated Finish Time: " + estimatedFinishTimeString);
     }
